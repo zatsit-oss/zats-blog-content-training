@@ -1,11 +1,7 @@
 ---
 slug: entreprise-a-mission
 title: "Nous sommes Entreprise à Mission"
-authors:
-  - name: Flavien Bailleul
-    title: Co-fondateur engagé
-    socials:
-      linkedin: flavien-bailleul
+authors: [fbailleul]
 tags: [general]
 ---
 
