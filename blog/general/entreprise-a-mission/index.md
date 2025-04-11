@@ -12,6 +12,7 @@ tags: [general]
 
 ### **Donner du sens au numérique & à l’entreprise**
 
+
 Quand nous avons cofondé **zatsit**, nous ne voulions pas créer une énième ESN. Le marché n’en manque pas et il en existe déjà beaucoup. Trop peut-être.  
 Ce que nous voulions, c’était **faire émerger une autre façon d’entreprendre, dans le numérique**. Une façon plus humaine, plus responsable, plus engagée.
 
