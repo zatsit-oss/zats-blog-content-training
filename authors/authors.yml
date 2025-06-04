@@ -70,3 +70,12 @@ nlefebvre:
   socials:
     github: lef-nicolas
     linkedin: nicolas-lefebvre-82965419
+
+jleuchart:
+  name: Julien Leuchart
+  title: Developer
+  url: https://github.com/latenat
+  image_url: /img/authors/jleuchart.webp
+  socials:
+    github: latenat
+    linkedin: julien-leuchart
