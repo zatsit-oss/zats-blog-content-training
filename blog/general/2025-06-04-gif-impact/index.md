@@ -15,6 +15,37 @@ tags: [general]
 
 Un GIF (Graphics Interchange Format) est un format d’image animé, limité à 256 couleurs, conçu à l’origine dans les années 1980. Malgré sa faible profondeur de couleurs, il est très populaire pour les animations simples. Un seul fichier GIF peut contenir plusieurs images enchaînées qui tournent en boucle.
 
+
+:::note
+
+Some **content** with _Markdown_ `syntax`. Check [this `api`](#).
+
+:::
+
+:::tip
+
+Some **content** with _Markdown_ `syntax`. Check [this `api`](#).
+
+:::
+
+:::info
+
+Some **content** with _Markdown_ `syntax`. Check [this `api`](#).
+
+:::
+
+:::warning
+
+Some **content** with _Markdown_ `syntax`. Check [this `api`](#).
+
+:::
+
+:::danger
+
+Some **content** with _Markdown_ `syntax`. Check [this `api`](#).
+
+:::
+
 ---
 
 ### Le poids d’un GIF : un faux petit fichier
