@@ -11,6 +11,12 @@ Créer son propre model AI avec Mistral
 
 # Créer son propre model AI avec Mistral
 
+::: info
+
+Test info 
+
+:::
+
 
 ```python
 !pip install numpy -q
