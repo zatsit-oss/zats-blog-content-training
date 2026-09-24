@@ -1,9 +1,9 @@
 # Posting in **zatsit** Blog
 
-> Remember that the official documentation of docusaurus is the reference.
+> The blog is rendered by the [zats-blog](https://github.com/zatsit-oss/zats-blog) Astro shell, which reads this
+> repository in place. What it supports, and nothing more, is described below.
 
-Docusaurus proposes file conventions to make blog posts, but we added a top level folder hierarchy to categorize posts
-(and change the way we name file blog post) :
+Posts are grouped in a top level folder per category. The folder an article sits in **is** its category:
 
 - [ai](blog%2Fai)
 - [architecture](blog%2Farchitecture)
@@ -19,7 +19,7 @@ Docusaurus proposes file conventions to make blog posts, but we added a top leve
 > If you think you need a new category, please contact [DT](mailto:dirtech@zatsit.fr).
 
 > If you think your post belongs to more than one category, choose the main one to create it. 
-> Don't worry, tags in your post will help Docusaurus to index it. 
+> Don't worry, tags in your post will index it across categories. 
 
 ## Create a post for the first time
 
@@ -35,7 +35,8 @@ git branch -c feat/category-YYYYMMDD-MyTitle
 
 You are ready to write !
 
-> For further information about the available Markdown functionalities, please read the [official documentation](https://docusaurus.io/fr/docs/next/markdown-features).
+> Posts are plain Markdown (no MDX): standard syntax, GFM tables and code blocks, plus the admonitions and
+> the display math described below.
 
 ### Add your author information
 
@@ -54,18 +55,20 @@ jdoe:
   name: John Doe
   title: Site Reliability Engineer  @ **zatsit**
   url: Github account or Linkedin account
-  image_url: /img/authors/your_picture.webp
+  image_url: /img/authors/jdoe.webp
 ```
 
-Then in your category folder (under [the blog folder](./blog)) create a folder like : `YYYY-MM-DD-SLUG`, where SLUG 
-will be used by the Docusaurus router (in fact, it the 'slug' property in your post that router will use, 
-but by convention we use it in the folder naming).
+> The avatar is found by **file name**: `authors/img/jdoe.webp` for the key `jdoe`. Name the file after your key.
+
+Then in your category folder (under [the blog folder](./blog)) create a folder like : `YYYY-MM-DD-slug`.
+The date in the folder name is the publication date when the frontmatter has no `date`. The URL comes from
+the `slug` property of your post, served at `/<slug>/`; by convention, the folder uses the same slug.
 
 
 ```sh
 cd blog
 cd category
-mkdir YYYYMMDD-SLUG
+mkdir YYYY-MM-DD-slug
 touch index.md
 vim index.md (it is a joke)
 ```
@@ -90,8 +93,11 @@ The attributes definition :
 | slug       | Your future uri                  |
 | title      | Title of the post |
 | authors    | All your posts will be indexed with your author name, refers to the key in the authors.yml file |
-| date       | The publication date (take care of the value during PR reviewing) |
+| date       | Optional. The publication date, defaults to the date of the folder name (take care of the value during PR reviewing) |
 | tags       | To be categorized              |
+| description | Optional. Summary for the list page and search engines, replaces the text above `<!-- truncate -->` |
+| shareText  | Optional. Text of the X share link, defaults to the title |
+| draft      | Optional. `true` to keep the post unpublished |
 
 
 After this section you have few lines to sum up your post, it will be used in list page.
@@ -112,6 +118,8 @@ Then you can follow [this guide](https://www.markdownguide.org/basic-syntax/) to
 ### Using pictures
 
 All your pictures for your post have to be stored in your post folder, feel free to create subfolders if you want.
+Reference them with a relative path (`./my-picture.webp`): the shell repository is a separate checkout, so a path
+pointing outside your post folder, or to an external URL, will not be optimised and may break.
 
 > Do not forget alternative test for accessibility.
 
@@ -123,7 +131,23 @@ All your pictures for your post have to be stored in your post folder, feel free
 
 Using abmonitions provide a way to set visual take-away for the readers that is pretty cool !
 
-To use this feature in your article, please read the [related docusaurus documentation](https://docusaurus.io/fr/docs/markdown-features/admonitions)
+Wrap your text between two `:::` lines, the opening one naming the type. An optional title goes in brackets:
+
+```md
+:::tip
+
+Le plugin Maven OpenRewrite permet également d'enchaîner des recettes.
+
+:::
+
+:::warning[Titre choisi]
+
+Un point d'attention.
+
+:::
+```
+
+Supported types: `note`, `info`, `tip`, `warning`, `caution`, `danger`. Any other type fails the build.
 
 <img width="760" alt="image" src="https://github.com/user-attachments/assets/256db15d-5bd1-466d-bd40-b2afeda5b37b" />
 
@@ -173,4 +197,13 @@ a previous URL for you in order to visualize your post in an ephemeral blog inst
 
 ## Use mathematical representation  
 
-You can write mathematical expression with a specific syntax : KaTex. See the documentation of [https://docusaurus.io/docs/markdown-features/math-equations](https://docusaurus.io/docs/markdown-features/math-equations) for more information.official Docusaurus page.
+You can write a mathematical formula with the [KaTeX / LaTeX syntax](https://katex.org/docs/supported), as a block
+between two `$$` lines. It is rendered as MathML, with no script nor font to load.
+
+```md
+$$
+\text{WUE} = \frac{\text{Annual Site Water Usage (liters)}}{\text{IT Equipment Annual Energy Use (kWh)}}
+$$
+```
+
+> Only display math is supported: a single `$` stays literal text, so prices and shell prompts are safe.

@@ -28,11 +28,14 @@ do
   # Check if authors exist in authors.yml
   post_header_authors=$(sed '/---/,/---/!d' $post | grep "^authors:" | cut -d ':' -f2 | tr -d ' []')
   authors_list=$(cat ./authors/authors.yml | grep -e '^[a-z]*:' | cut -d ':' -f1)
-  echo $authors_list | tr " " '\n' | grep -F -q -x $post_header_authors
-  if [[ $? -eq 1 ]]; then
-    flag_exit=1
-    echo "Blog post $post authors ($post_header_authors) does not exist in authors.yml"
-  fi
+  for author in $(echo "$post_header_authors" | tr ',' ' ')
+  do
+    echo $authors_list | tr " " '\n' | grep -F -q -x "$author"
+    if [[ $? -eq 1 ]]; then
+      flag_exit=1
+      echo "Blog post $post author ($author) does not exist in authors.yml"
+    fi
+  done
 
   # Check tags field
   post_header_tags=$(sed '/---/,/---/!d' $post | grep "^tags:")

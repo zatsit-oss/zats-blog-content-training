@@ -1,7 +1,22 @@
 # **zatsit** blog contents repository
 
-This repository holds the contents of the **zatsit** blog. 
-Under the hood, it is built using [Docusaurus](https://docusaurus.io/), a modern static website generator.
+This repository holds the contents of the **zatsit** blog: articles, authors and their images.
+The site itself is built with [Astro](https://astro.build/) in a separate repository,
+[zats-blog](https://github.com/zatsit-oss/zats-blog), which reads this content in place.
+
+## Build the blog locally
+
+Clone the shell next to this repository. The shell expects the content under the exact directory name
+`zats-blog-content`, a path hard-coded in its `src/consts.ts` and `src/utils/avatars.ts`.
+
+```sh
+git clone git@github.com:zatsit-oss/zats-blog.git
+git clone git@github.com:zatsit-oss/zats-blog-content.git
+cd zats-blog
+npm install
+npm run dev              # dev server, hot reload on article changes
+npm run build && npm run preview   # production build, the only way to test search
+```
 
 Feel free to contribute to the blog by creating a pull request.
 - [Code of conduct](./CODE_OF_CONDUCT.md)
@@ -30,5 +45,6 @@ git config --global commit.gpgsign true
 Please follow the [posting guidelines](./POSTING.md) to write a new post.
 
 Opening your Pull Request will trigger a CI/CD pipeline that will generate 
-a preview on your article based on [zatsit blog](https://zatsit.github.io/blog/).
-Wait few seconds and check the preview link in the PR checks.
+an ephemeral Firebase preview of the whole blog, built with your branch.
+Wait a few minutes and check the preview link in the PR checks.
+Production is [blog.zatsit.fr](https://blog.zatsit.fr), rebuilt on each merge to `main`.

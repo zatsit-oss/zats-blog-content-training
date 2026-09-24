@@ -7,6 +7,8 @@ on:
     paths:
       - "blog/**"
       - "docs/**"
+      - "authors/**"
+      - "config.json"
 
 permissions:
   checks: write

@@ -7,12 +7,13 @@ Guidance for AI coding agents working in this repository.
 This is the **content repository** for the **zatsit blog** (<https://blog.zatsit.fr>).
 It holds blog posts and author metadata only — **not** the site itself.
 
-The Docusaurus configuration, theme, custom pages and build live in a **separate
-sibling repository** (`zats-blog`). Do not look here for `docusaurus.config.js`,
-React components, or CSS — they are not in this repo. A CI pipeline pulls this
-content into the build repo to produce the site.
+The Astro shell (configuration, layouts, content schema, build) lives in a **separate
+sibling repository** (`zats-blog`), which must be cloned next to this one under the
+exact name `zats-blog-content`. Its `glob()` loader reads this content **in place**,
+nothing is copied. Do not look here for `astro.config.mjs`, components or CSS.
+The frontmatter schema is `src/content.config.ts` in the shell.
 
-- **Stack:** Docusaurus 3.x (classic preset), French content, KaTeX math support, Lunr search.
+- **Stack:** Astro 7 (Sätteri markdown, no MDX), French content, MathML math, Pagefind search.
 - **Deployment:** PR → ephemeral Firebase preview; merge to `main` → production.
 - **Default language of published content:** **French.**
 
@@ -88,10 +89,11 @@ One or two French sentences summarizing the post — shown in the list/preview p
 Rest of the article…
 ```
 
-- `slug` — the public URI (under `/blog/`).
+- `slug` — the public URI, served at the root as `/<slug>/`.
 - `authors` — a list of **keys that must exist in `authors/authors.yml`** (the hook
   verifies this). If the author is new, add them first (see below).
-- `date` — publication date; double-check it during review.
+- `date` — optional publication date; the folder date is the fallback. Double-check it during review.
+- `description`, `shareText`, `draft` — optional; `description` replaces the excerpt above the truncate marker.
 - `tags` — quoted strings, used for cross-category indexing.
 - The `<!-- truncate -->` marker separates the list-page excerpt from the body.
 
@@ -102,8 +104,11 @@ Rest of the article…
 - Always provide **alt text** for accessibility, and **credit** images per their license.
 - **Videos:** never embed via `<iframe>` (not performant / not green). Link a thumbnail
   image to the video instead — see the AsyncAPI post for the pattern.
-- **Math:** use KaTeX syntax (see Docusaurus math-equations docs).
-- **Admonitions:** use Docusaurus admonitions for call-outs.
+- **Math:** KaTeX/LaTeX syntax, display blocks between `$$` lines only (a single `$` stays literal).
+  Rendered as MathML by the shell's `src/plugins/mdast-math.mjs`.
+- **Admonitions:** `:::type` … `:::` blocks, optional `:::type[Title]`. Types: `note`, `info`,
+  `tip`, `warning`, `caution`, `danger`; an unknown type fails the build
+  (`src/plugins/mdast-admonitions.mjs` in the shell).
 
 ## Adding / editing an author
 
@@ -116,7 +121,7 @@ jdoe:
   name: John Doe
   title: Site Reliability Engineer
   url: https://github.com/jdoe        # GitHub or LinkedIn
-  image_url: /img/authors/jdoe.webp   # served from the build repo's static/img/authors
+  image_url: /img/authors/jdoe.webp   # kept for the record, the avatar is found by file name
   socials:                            # optional
     github: jdoe
     linkedin: john-doe
@@ -124,8 +129,9 @@ jdoe:
     bluesky: jdoe.bsky.social
 ```
 
-Note `image_url` uses the runtime path `/img/authors/<key>.webp` (resolved in the
-build repo), while the file itself lives in this repo under `authors/img/`.
+The shell finds the avatar by **file name**: `authors/img/<key>.webp` (or `.jpeg`,
+`.jpg`, `.png`) for the author key `<key>`, and optimises it at build time. The file
+must be named after the key.
 
 ## Validation — must pass before merge
 
@@ -136,7 +142,7 @@ Local hooks in `.hooks/` are wired through `.pre-commit-config.yaml`:
 | `check_categories-list.sh` | Every `blog/*` folder is a category in `config.json` |
 | `check_post-directory-name.sh` | Post folders match `YYYY-MM-DD-slug` |
 | `check_post-filename.sh` | Each post folder contains `index.md` |
-| `check_post-headers.sh` | Frontmatter has `slug`, `title`, `authors`, `tags`; authors exist in `authors.yml` |
+| `check_post-headers.sh` | Frontmatter has `slug`, `title`, `authors`, `tags`; every author exists in `authors.yml` |
 
 Run them locally:
 
@@ -164,7 +170,7 @@ line-length disabled; ignores listed in `.markdownlintignore`) and **yamllint**
 ## Quick checklist for a new post
 
 - [ ] Folder: `blog/<valid-category>/YYYY-MM-DD-<slug>/index.md`
-- [ ] Frontmatter has `slug`, `title`, `authors`, `date`, `tags`
+- [ ] Frontmatter has `slug`, `title`, `authors`, `tags` (and `date` if it differs from the folder)
 - [ ] Every author key exists in `authors/authors.yml`
 - [ ] French content, excerpt + `<!-- truncate -->`
 - [ ] Images inside the post folder, `webp`/`avif`, with alt text + credit
