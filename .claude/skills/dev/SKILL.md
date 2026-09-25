@@ -8,6 +8,8 @@ The site is rendered by the sibling shell `../zats-blog`, which reads the conten
 
 1. Check that `../zats-blog` exists, and that `../zats-blog-content` is this repository (a symlink to it or the
    checkout itself). If it is another checkout, tell the user: the build would render stale content.
+   In the training mirror, the fix is to clone `zats-blog-content-training` under the name `zats-blog-content`,
+   or to symlink it there.
 2. Start the server:
 
 ```bash

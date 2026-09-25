@@ -14,6 +14,7 @@ npm run check:a11y   # WCAG contrasts
 npm run check:eco    # page weight budgets
 ```
 
-Every command fails on error. Report content errors (unknown admonition type, missing date,
-unknown category, schema error) against the post that caused them, and fix the post, not the shell.
+Every command fails on error. Report content errors (missing date, unknown category, schema error)
+against the post that caused them, and fix the post, not the shell. Also scan the build output for
+`[admonitions] type inconnu` warnings: an unknown admonition type does not fail the build.
 `npm run preview` then serves `dist/` with working search.
